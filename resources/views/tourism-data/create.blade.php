@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="card">
             <div class="card-header bg-white">
                 <h6 class="mb-0"><i class="bi bi-plus-circle"></i> New Tourism Data Entry</h6>
@@ -51,6 +51,86 @@
                         <label for="visit_date" class="form-label fw-semibold">Visit Date <span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error('visit_date') is-invalid @enderror" id="visit_date" name="visit_date" value="{{ old('visit_date', date('Y-m-d')) }}" required>
                         @error('visit_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="month" class="form-label fw-semibold">Month</label>
+                            <select class="form-select @error('month') is-invalid @enderror" id="month" name="month">
+                                <option value="">Select Month</option>
+                                @foreach(['January','February','March','April','May','June','July','August','September','October','November','December'] as $i => $m)
+                                    <option value="{{ $i + 1 }}" {{ old('month') == ($i + 1) ? 'selected' : '' }}>{{ $m }}</option>
+                                @endforeach
+                            </select>
+                            @error('month')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="age_group" class="form-label fw-semibold">Age Group</label>
+                            <select class="form-select @error('age_group') is-invalid @enderror" id="age_group" name="age_group">
+                                <option value="">Select Age Group</option>
+                                @foreach($ageGroups as $group)
+                                    <option value="{{ $group->name }}" {{ old('age_group') == $group->name ? 'selected' : '' }}>{{ $group->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('age_group')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="travel_type" class="form-label fw-semibold">Travel Type</label>
+                            <select class="form-select @error('travel_type') is-invalid @enderror" id="travel_type" name="travel_type">
+                                <option value="">Select Travel Type</option>
+                                @foreach($travelTypes as $type)
+                                    <option value="{{ $type->name }}" {{ old('travel_type') == $type->name ? 'selected' : '' }}>{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('travel_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="budget" class="form-label fw-semibold">Budget</label>
+                            <select class="form-select @error('budget') is-invalid @enderror" id="budget" name="budget">
+                                <option value="">Select Budget</option>
+                                @foreach($budgetCategories as $b)
+                                    <option value="{{ $b->name }}" {{ old('budget') == $b->name ? 'selected' : '' }}>{{ $b->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('budget')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="duration" class="form-label fw-semibold">Duration (days)</label>
+                            <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" min="1" placeholder="Number of days">
+                            @error('duration')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="satisfaction" class="form-label fw-semibold">Satisfaction (1-5)</label>
+                            <select class="form-select @error('satisfaction') is-invalid @enderror" id="satisfaction" name="satisfaction">
+                                <option value="">Select Rating</option>
+                                @for($s = 1; $s <= 5; $s++)
+                                    <option value="{{ $s }}" {{ old('satisfaction') == $s ? 'selected' : '' }}>{{ $s }} - {{ ['Very Poor','Poor','Average','Good','Excellent'][$s-1] }}</option>
+                                @endfor
+                            </select>
+                            @error('satisfaction')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="previous_visits" class="form-label fw-semibold">Previous Visits</label>
+                            <input type="number" class="form-control @error('previous_visits') is-invalid @enderror" id="previous_visits" name="previous_visits" value="{{ old('previous_visits') }}" min="0" placeholder="0">
+                            @error('previous_visits')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="spending" class="form-label fw-semibold">Spending ($)</label>
+                            <input type="number" step="0.01" class="form-control @error('spending') is-invalid @enderror" id="spending" name="spending" value="{{ old('spending') }}" min="0" placeholder="0.00">
+                            @error('spending')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-4 mb-3 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input @error('will_return') is-invalid @enderror" type="checkbox" id="will_return" name="will_return" value="1" {{ old('will_return') ? 'checked' : '' }}>
+                                <label class="form-check-label fw-semibold" for="will_return">Will Return?</label>
+                                @error('will_return')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="feedback" class="form-label fw-semibold">Feedback/Comments <small class="text-muted">(optional)</small></label>

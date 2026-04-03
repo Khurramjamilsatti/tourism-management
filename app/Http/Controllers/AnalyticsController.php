@@ -25,7 +25,7 @@ class AnalyticsController extends Controller
                 DB::raw('count(*) as total')
             )
             ->where('visit_date', '>=', now()->subMonths(12))
-            ->groupBy('month')
+            ->groupBy(DB::raw("DATE_FORMAT(visit_date, '%Y-%m')"))
             ->orderBy('month')
             ->get();
 

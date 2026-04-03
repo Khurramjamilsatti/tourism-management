@@ -9,8 +9,7 @@
         <h6 class="mb-0"><i class="bi bi-funnel"></i> Report Filters</h6>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('reports.generate') }}">
-            @csrf
+        <form method="GET" action="{{ route('reports.generate') }}">
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label fw-semibold">Date From</label>
@@ -113,7 +112,7 @@
                 <tbody>
                     @forelse($records as $index => $record)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $index + 1 + ($records->currentPage() - 1) * $records->perPage() }}</td>
                         <td>{{ $record->visitor_name ?? 'Anonymous' }}</td>
                         <td>{{ $record->country->name }}</td>
                         <td>{{ $record->city_visited }}</td>
@@ -131,6 +130,11 @@
             </table>
         </div>
     </div>
+    @if($records->hasPages())
+    <div class="card-footer bg-white">
+        {{ $records->links() }}
+    </div>
+    @endif
 </div>
 @endif
 @endsection

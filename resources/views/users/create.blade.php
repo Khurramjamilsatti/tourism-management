@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-10">
         <div class="card">
             <div class="card-header bg-white">
                 <h6 class="mb-0"><i class="bi bi-plus-circle"></i> New User</h6>

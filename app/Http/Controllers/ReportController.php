@@ -41,11 +41,11 @@ class ReportController extends Controller
             $query->where('purpose_id', $request->purpose_id);
         }
 
-        $records = $query->orderBy('visit_date', 'desc')->get();
+        $records = $query->orderBy('visit_date', 'desc')->paginate(100)->withQueryString();
 
         // Summary stats
         $summary = [
-            'total_records' => $records->count(),
+            'total_records' => $records->total(),
             'countries' => $records->pluck('country.name')->unique()->count(),
             'cities' => $records->pluck('city_visited')->unique()->count(),
             'date_range' => $request->date_from . ' to ' . $request->date_to,

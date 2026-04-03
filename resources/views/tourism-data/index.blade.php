@@ -62,8 +62,7 @@
                         <th>City</th>
                         <th>Purpose</th>
                         <th>Visit Date</th>
-                        <th>Recorded By</th>
-                        <th width="120">Actions</th>
+                        <th width="150">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,8 +74,26 @@
                         <td>{{ $record->city_visited }}</td>
                         <td><span class="badge bg-info">{{ $record->purpose->name }}</span></td>
                         <td>{{ $record->visit_date->format('d M Y') }}</td>
-                        <td>{{ $record->creator->name }}</td>
                         <td>
+                            <button type="button" class="btn btn-info btn-sm" title="View Details" data-bs-toggle="modal" data-bs-target="#viewModal"
+                                data-visitor="{{ $record->visitor_name ?? 'Anonymous' }}"
+                                data-country="{{ $record->country->name }}"
+                                data-city="{{ $record->city_visited }}"
+                                data-purpose="{{ $record->purpose->name }}"
+                                data-date="{{ $record->visit_date->format('d M Y') }}"
+                                data-month="{{ $record->month ? \DateTime::createFromFormat('!m', $record->month)->format('F') : '-' }}"
+                                data-age-group="{{ $record->age_group ?? '-' }}"
+                                data-travel-type="{{ $record->travel_type ?? '-' }}"
+                                data-budget="{{ $record->budget ?? '-' }}"
+                                data-duration="{{ $record->duration ? $record->duration . ' days' : '-' }}"
+                                data-satisfaction="{{ $record->satisfaction ? $record->satisfaction . '/5' : '-' }}"
+                                data-previous-visits="{{ $record->previous_visits ?? '-' }}"
+                                data-spending="{{ $record->spending ? '$' . number_format($record->spending, 2) : '-' }}"
+                                data-will-return="{{ !is_null($record->will_return) ? ($record->will_return ? 'Yes' : 'No') : '-' }}"
+                                data-feedback="{{ $record->feedback ?? '-' }}"
+                                data-recorded-by="{{ $record->creator->name }}">
+                                <i class="bi bi-eye"></i>
+                            </button>
                             <a href="{{ route('tourism-data.edit', $record) }}" class="btn btn-warning btn-sm" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </a>
@@ -91,7 +108,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-4">No records found.</td>
+                        <td colspan="7" class="text-center text-muted py-4">No records found.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -104,4 +121,74 @@
     </div>
     @endif
 </div>
+
+{{-- View Details Modal --}}
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="viewModalLabel"><i class="bi bi-eye"></i> Tourism Record Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless table-sm">
+                            <tr><th class="text-muted" width="40%">Visitor Name</th><td id="modal-visitor"></td></tr>
+                            <tr><th class="text-muted">Country</th><td id="modal-country"></td></tr>
+                            <tr><th class="text-muted">City Visited</th><td id="modal-city"></td></tr>
+                            <tr><th class="text-muted">Purpose</th><td id="modal-purpose"></td></tr>
+                            <tr><th class="text-muted">Visit Date</th><td id="modal-date"></td></tr>
+                            <tr><th class="text-muted">Month</th><td id="modal-month"></td></tr>
+                            <tr><th class="text-muted">Age Group</th><td id="modal-age-group"></td></tr>
+                            <tr><th class="text-muted">Recorded By</th><td id="modal-recorded-by"></td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-borderless table-sm">
+                            <tr><th class="text-muted" width="40%">Travel Type</th><td id="modal-travel-type"></td></tr>
+                            <tr><th class="text-muted">Budget</th><td id="modal-budget"></td></tr>
+                            <tr><th class="text-muted">Duration</th><td id="modal-duration"></td></tr>
+                            <tr><th class="text-muted">Satisfaction</th><td id="modal-satisfaction"></td></tr>
+                            <tr><th class="text-muted">Previous Visits</th><td id="modal-previous-visits"></td></tr>
+                            <tr><th class="text-muted">Spending</th><td id="modal-spending"></td></tr>
+                            <tr><th class="text-muted">Will Return</th><td id="modal-will-return"></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="border-top pt-2 mt-2">
+                    <strong class="text-muted">Feedback:</strong>
+                    <p id="modal-feedback" class="mb-0 mt-1"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+document.getElementById('viewModal').addEventListener('show.bs.modal', function (event) {
+    const btn = event.relatedTarget;
+    document.getElementById('modal-visitor').textContent = btn.dataset.visitor;
+    document.getElementById('modal-country').textContent = btn.dataset.country;
+    document.getElementById('modal-city').textContent = btn.dataset.city;
+    document.getElementById('modal-purpose').textContent = btn.dataset.purpose;
+    document.getElementById('modal-date').textContent = btn.dataset.date;
+    document.getElementById('modal-month').textContent = btn.dataset.month;
+    document.getElementById('modal-age-group').textContent = btn.dataset.ageGroup;
+    document.getElementById('modal-travel-type').textContent = btn.dataset.travelType;
+    document.getElementById('modal-budget').textContent = btn.dataset.budget;
+    document.getElementById('modal-duration').textContent = btn.dataset.duration;
+    document.getElementById('modal-satisfaction').textContent = btn.dataset.satisfaction;
+    document.getElementById('modal-previous-visits').textContent = btn.dataset.previousVisits;
+    document.getElementById('modal-spending').textContent = btn.dataset.spending;
+    document.getElementById('modal-will-return').textContent = btn.dataset.willReturn;
+    document.getElementById('modal-feedback').textContent = btn.dataset.feedback;
+    document.getElementById('modal-recorded-by').textContent = btn.dataset.recordedBy;
+});
+</script>
+@endpush

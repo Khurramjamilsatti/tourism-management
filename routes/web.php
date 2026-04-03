@@ -6,6 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TourismDataController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\VisitPurposeController;
+use App\Http\Controllers\AgeGroupController;
+use App\Http\Controllers\TravelTypeController;
+use App\Http\Controllers\BudgetCategoryController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\WeatherController;
@@ -33,12 +36,15 @@ Route::middleware('auth')->group(function () {
 
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::post('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
+    Route::match(['get', 'post'], '/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
     Route::get('/reports/export', [ReportController::class, 'exportCsv'])->name('reports.export');
 
     // Master Data
     Route::resource('countries', CountryController::class)->except(['show']);
     Route::resource('visit-purposes', VisitPurposeController::class)->except(['show']);
+    Route::resource('age-groups', AgeGroupController::class)->except(['show']);
+    Route::resource('travel-types', TravelTypeController::class)->except(['show']);
+    Route::resource('budget-categories', BudgetCategoryController::class)->except(['show']);
 
     // Weather API
     Route::get('/api/weather', [WeatherController::class, 'getWeather'])->name('weather');

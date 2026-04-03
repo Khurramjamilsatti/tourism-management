@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgeGroup;
+use App\Models\BudgetCategory;
 use App\Models\Country;
 use App\Models\TourismData;
+use App\Models\TravelType;
 use App\Models\VisitPurpose;
 use Illuminate\Http\Request;
 
@@ -37,7 +40,7 @@ class TourismDataController extends Controller
             $query->where('visit_date', '<=', $request->date_to);
         }
 
-        $records = $query->latest()->paginate(15)->withQueryString();
+        $records = $query->latest()->paginate(100)->withQueryString();
         $countries = Country::orderBy('name')->get();
         $purposes = VisitPurpose::orderBy('name')->get();
 
@@ -48,7 +51,10 @@ class TourismDataController extends Controller
     {
         $countries = Country::orderBy('name')->get();
         $purposes = VisitPurpose::orderBy('name')->get();
-        return view('tourism-data.create', compact('countries', 'purposes'));
+        $ageGroups = AgeGroup::orderBy('name')->get();
+        $travelTypes = TravelType::orderBy('name')->get();
+        $budgetCategories = BudgetCategory::orderBy('name')->get();
+        return view('tourism-data.create', compact('countries', 'purposes', 'ageGroups', 'travelTypes', 'budgetCategories'));
     }
 
     public function store(Request $request)
@@ -59,10 +65,20 @@ class TourismDataController extends Controller
             'city_visited' => 'required|string|max:255',
             'purpose_id' => 'required|exists:visit_purposes,id',
             'visit_date' => 'required|date',
+            'month' => 'nullable|integer|min:1|max:12',
+            'age_group' => 'nullable|string|max:50',
+            'travel_type' => 'nullable|string|max:50',
+            'budget' => 'nullable|string|max:50',
+            'duration' => 'nullable|integer|min:1',
+            'satisfaction' => 'nullable|integer|min:1|max:5',
+            'previous_visits' => 'nullable|integer|min:0',
+            'spending' => 'nullable|numeric|min:0',
+            'will_return' => 'nullable|boolean',
             'feedback' => 'nullable|string|max:2000',
         ]);
 
         $validated['created_by'] = auth()->id();
+        $validated['will_return'] = $request->has('will_return') ? 1 : 0;
 
         TourismData::create($validated);
 
@@ -74,7 +90,10 @@ class TourismDataController extends Controller
     {
         $countries = Country::orderBy('name')->get();
         $purposes = VisitPurpose::orderBy('name')->get();
-        return view('tourism-data.edit', compact('tourismData', 'countries', 'purposes'));
+        $ageGroups = AgeGroup::orderBy('name')->get();
+        $travelTypes = TravelType::orderBy('name')->get();
+        $budgetCategories = BudgetCategory::orderBy('name')->get();
+        return view('tourism-data.edit', compact('tourismData', 'countries', 'purposes', 'ageGroups', 'travelTypes', 'budgetCategories'));
     }
 
     public function update(Request $request, TourismData $tourismData)
@@ -85,8 +104,19 @@ class TourismDataController extends Controller
             'city_visited' => 'required|string|max:255',
             'purpose_id' => 'required|exists:visit_purposes,id',
             'visit_date' => 'required|date',
+            'month' => 'nullable|integer|min:1|max:12',
+            'age_group' => 'nullable|string|max:50',
+            'travel_type' => 'nullable|string|max:50',
+            'budget' => 'nullable|string|max:50',
+            'duration' => 'nullable|integer|min:1',
+            'satisfaction' => 'nullable|integer|min:1|max:5',
+            'previous_visits' => 'nullable|integer|min:0',
+            'spending' => 'nullable|numeric|min:0',
+            'will_return' => 'nullable|boolean',
             'feedback' => 'nullable|string|max:2000',
         ]);
+
+        $validated['will_return'] = $request->has('will_return') ? 1 : 0;
 
         $tourismData->update($validated);
 

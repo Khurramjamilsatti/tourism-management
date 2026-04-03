@@ -11,11 +11,13 @@
         body { background-color: #f4f6f9; }
         .sidebar {
             min-height: 100vh;
+            max-height: 100vh;
             background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
             padding-top: 0;
             position: fixed;
             width: 250px;
             z-index: 1000;
+            overflow-y: auto;
         }
         .sidebar .nav-link {
             color: rgba(255,255,255,0.8);
@@ -107,6 +109,21 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('visit-purposes.*') ? 'active' : '' }}" href="{{ route('visit-purposes.index') }}">
                         <i class="bi bi-bookmark"></i> Visit Purposes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('age-groups.*') ? 'active' : '' }}" href="{{ route('age-groups.index') }}">
+                        <i class="bi bi-person-lines-fill"></i> Age Groups
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('travel-types.*') ? 'active' : '' }}" href="{{ route('travel-types.index') }}">
+                        <i class="bi bi-airplane"></i> Travel Types
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('budget-categories.*') ? 'active' : '' }}" href="{{ route('budget-categories.index') }}">
+                        <i class="bi bi-wallet2"></i> Budget Categories
                     </a>
                 </li>
 
