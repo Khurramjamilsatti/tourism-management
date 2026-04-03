@@ -58,8 +58,8 @@
                     <tr>
                         <th>#</th>
                         <th>Visitor Name</th>
-                        <th>Country</th>
-                        <th>City</th>
+                        <th>Country of Origin</th>
+                        <th>City Visited</th>
                         <th>Purpose</th>
                         <th>Visit Date</th>
                         <th width="150">Actions</th>
@@ -135,7 +135,7 @@
                     <div class="col-md-6">
                         <table class="table table-borderless table-sm">
                             <tr><th class="text-muted" width="40%">Visitor Name</th><td id="modal-visitor"></td></tr>
-                            <tr><th class="text-muted">Country</th><td id="modal-country"></td></tr>
+                            <tr><th class="text-muted">Country of Origin</th><td id="modal-country"></td></tr>
                             <tr><th class="text-muted">City Visited</th><td id="modal-city"></td></tr>
                             <tr><th class="text-muted">Purpose</th><td id="modal-purpose"></td></tr>
                             <tr><th class="text-muted">Visit Date</th><td id="modal-date"></td></tr>
