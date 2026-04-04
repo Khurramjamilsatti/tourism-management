@@ -49,7 +49,7 @@
                     <td>{{ $loop->iteration + ($countries->currentPage() - 1) * $countries->perPage() }}</td>
                     <td>{{ $country->name }}</td>
                     <td>{{ $country->code ?? '-' }}</td>
-                    <td><a href="{{ URL::to('tourism-data?country_id=' . $country->id) }}" class="badge bg-primary">{{ $country->tourism_data_count }}</a></td>
+                    <td><a href="{{ URL::to('tourism-data?country_id=' . $country->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $country->tourism_data_count }}</a></td>
                     <td>
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('countries.edit', $country) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
