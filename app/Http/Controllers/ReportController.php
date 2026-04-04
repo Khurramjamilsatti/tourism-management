@@ -19,12 +19,18 @@ class ReportController extends Controller
 
     public function generate(Request $request)
     {
-        $request->validate([
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date|after_or_equal:date_from',
+        $rules = [
+            'date_from' => 'nullable|date_format:Y-m-d',
+            'date_to'   => 'nullable|date_format:Y-m-d',
             'country_id' => 'nullable|exists:countries,id',
             'purpose_id' => 'nullable|exists:visit_purposes,id',
-        ]);
+        ];
+
+        if ($request->filled('date_from')) {
+            $rules['date_to'] .= '|after_or_equal:date_from';
+        }
+
+        $request->validate($rules);
 
         $query = TourismData::with(['country', 'purpose', 'creator']);
 
