@@ -12,7 +12,7 @@ class CountryController extends Controller
         $countries = Country::withCount('tourismData')
             ->when($request->search, fn($q, $s) => $q->where('name', 'like', "%{$s}%"))
             ->orderBy('name')
-            ->paginate(15)
+            ->paginate(100)
             ->withQueryString();
         return view('countries.index', compact('countries'));
     }
