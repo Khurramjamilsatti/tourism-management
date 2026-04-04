@@ -45,6 +45,8 @@
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                         </form>
                         @endif
+                        @else
+                        <span class="badge bg-light text-muted border" style="font-size:.7rem"><i class="bi bi-lock"></i> View only</span>
                         @endif
                     </td>
                 </tr>
