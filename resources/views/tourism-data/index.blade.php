@@ -30,6 +30,33 @@
                 </select>
             </div>
             <div class="col-md-2">
+                <label class="form-label small fw-semibold">Age Group</label>
+                <select name="age_group" class="form-select form-select-sm">
+                    <option value="">All Age Groups</option>
+                    @foreach($ageGroups as $ag)
+                        <option value="{{ $ag->name }}" {{ request('age_group') == $ag->name ? 'selected' : '' }}>{{ $ag->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">Travel Type</label>
+                <select name="travel_type" class="form-select form-select-sm">
+                    <option value="">All Travel Types</option>
+                    @foreach($travelTypes as $tt)
+                        <option value="{{ $tt->name }}" {{ request('travel_type') == $tt->name ? 'selected' : '' }}>{{ $tt->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">Budget</label>
+                <select name="budget" class="form-select form-select-sm">
+                    <option value="">All Budgets</option>
+                    @foreach($budgetCategories as $bc)
+                        <option value="{{ $bc->name }}" {{ request('budget') == $bc->name ? 'selected' : '' }}>{{ $bc->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
                 <label class="form-label small fw-semibold">Date From</label>
                 <input type="date" name="date_from" class="form-control form-control-sm" value="{{ request('date_from') }}">
             </div>
@@ -40,6 +67,11 @@
             <div class="col-md-1">
                 <button type="submit" class="btn btn-primary btn-sm w-100"><i class="bi bi-search"></i></button>
             </div>
+            @if(request()->hasAny(['search','country_id','purpose_id','age_group','travel_type','budget','date_from','date_to']))
+            <div class="col-md-1">
+                <a href="{{ route('tourism-data.index') }}" class="btn btn-secondary btn-sm w-100"><i class="bi bi-x-lg"></i></a>
+            </div>
+            @endif
         </form>
     </div>
 </div>

@@ -40,11 +40,26 @@ class TourismDataController extends Controller
             $query->where('visit_date', '<=', $request->date_to);
         }
 
+        if ($request->filled('age_group')) {
+            $query->where('age_group', $request->age_group);
+        }
+
+        if ($request->filled('travel_type')) {
+            $query->where('travel_type', $request->travel_type);
+        }
+
+        if ($request->filled('budget')) {
+            $query->where('budget', $request->budget);
+        }
+
         $records = $query->latest()->paginate(100)->withQueryString();
         $countries = Country::orderBy('name')->get();
         $purposes = VisitPurpose::orderBy('name')->get();
+        $ageGroups = AgeGroup::orderBy('name')->get();
+        $travelTypes = TravelType::orderBy('name')->get();
+        $budgetCategories = BudgetCategory::orderBy('name')->get();
 
-        return view('tourism-data.index', compact('records', 'countries', 'purposes'));
+        return view('tourism-data.index', compact('records', 'countries', 'purposes', 'ageGroups', 'travelTypes', 'budgetCategories'));
     }
 
     public function create()
