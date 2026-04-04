@@ -73,15 +73,15 @@
                         <td>{{ $record->country->name }}</td>
                         <td>{{ $record->city_visited }}</td>
                         <td><span class="badge bg-info">{{ $record->purpose->name }}</span></td>
-                        <td>{{ $record->visit_date->format('d M Y') }}</td>
+                        <td>{{ $record->visit_date ? $record->visit_date->format('d M Y') : '-' }}</td>
                         <td>
                             <button type="button" class="btn btn-info btn-sm" title="View Details" data-bs-toggle="modal" data-bs-target="#viewModal"
                                 data-visitor="{{ $record->visitor_name ?? 'Anonymous' }}"
                                 data-country="{{ $record->country->name }}"
                                 data-city="{{ $record->city_visited }}"
                                 data-purpose="{{ $record->purpose->name }}"
-                                data-date="{{ $record->visit_date->format('d M Y') }}"
-                                data-month="{{ $record->month ? \DateTime::createFromFormat('!m', $record->month)->format('F') : '-' }}"
+                                data-date="{{ $record->visit_date ? $record->visit_date->format('d M Y') : '-' }}"
+                                data-month="{{ $record->month && $record->month >= 1 && $record->month <= 12 ? date('F', mktime(0, 0, 0, $record->month, 1)) : '-' }}"
                                 data-age-group="{{ $record->age_group ?? '-' }}"
                                 data-travel-type="{{ $record->travel_type ?? '-' }}"
                                 data-budget="{{ $record->budget ?? '-' }}"
@@ -94,6 +94,7 @@
                                 data-recorded-by="{{ $record->creator->name }}">
                                 <i class="bi bi-eye"></i>
                             </button>
+                            @if(auth()->user()->isAdmin())
                             <a href="{{ route('tourism-data.edit', $record) }}" class="btn btn-warning btn-sm" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </a>
@@ -104,6 +105,7 @@
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

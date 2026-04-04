@@ -46,11 +46,35 @@ class AnalyticsController extends Controller
             ->take(10)
             ->get();
 
+        // Age group distribution
+        $ageGroupDistribution = TourismData::select('age_group', DB::raw('count(*) as total'))
+            ->whereNotNull('age_group')
+            ->groupBy('age_group')
+            ->orderByDesc('total')
+            ->get();
+
+        // Travel type distribution
+        $travelTypeDistribution = TourismData::select('travel_type', DB::raw('count(*) as total'))
+            ->whereNotNull('travel_type')
+            ->groupBy('travel_type')
+            ->orderByDesc('total')
+            ->get();
+
+        // Budget category distribution
+        $budgetDistribution = TourismData::select('budget', DB::raw('count(*) as total'))
+            ->whereNotNull('budget')
+            ->groupBy('budget')
+            ->orderByDesc('total')
+            ->get();
+
         return view('analytics.index', compact(
             'visitorsByCountry',
             'monthlyTrends',
             'purposeDistribution',
-            'topCities'
+            'topCities',
+            'ageGroupDistribution',
+            'travelTypeDistribution',
+            'budgetDistribution'
         ));
     }
 }

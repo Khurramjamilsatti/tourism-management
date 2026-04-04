@@ -4,12 +4,33 @@
 @section('page-title', 'Countries Management')
 
 @section('content')
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" action="{{ route('countries.index') }}" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold">Search Country</label>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Country name..." value="{{ request('search') }}">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-sm w-100"><i class="bi bi-search"></i></button>
+            </div>
+            @if(request('search'))
+            <div class="col-md-1">
+                <a href="{{ route('countries.index') }}" class="btn btn-secondary btn-sm w-100"><i class="bi bi-x-lg"></i></a>
+            </div>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h6 class="mb-0">All Countries</h6>
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('countries.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-circle"></i> Add Country
         </a>
+        @endif
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -30,12 +51,14 @@
                     <td>{{ $country->code ?? '-' }}</td>
                     <td><span class="badge bg-primary">{{ $country->tourism_data_count }}</span></td>
                     <td>
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('countries.edit', $country) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
                         <form action="{{ route('countries.destroy', $country) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this country?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @empty

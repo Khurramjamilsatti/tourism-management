@@ -117,7 +117,7 @@
                         <td>{{ $record->country->name }}</td>
                         <td>{{ $record->city_visited }}</td>
                         <td><span class="badge bg-info">{{ $record->purpose->name }}</span></td>
-                        <td>{{ $record->visit_date->format('d M Y') }}</td>
+                        <td>{{ $record->visit_date ? $record->visit_date->format('d M Y') : '-' }}</td>
                         <td>{{ Str::limit($record->feedback, 50) ?? '-' }}</td>
                         <td>{{ $record->creator->name }}</td>
                     </tr>

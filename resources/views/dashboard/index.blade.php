@@ -84,6 +84,40 @@
     </div>
 </div>
 
+{{-- New Charts Row: Age Group, Travel Type, Budget --}}
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="bi bi-person-lines-fill"></i> Age Group Distribution</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="ageGroupChart" height="280"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="bi bi-airplane"></i> Travel Type Distribution</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="travelTypeChart" height="280"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0"><i class="bi bi-wallet2"></i> Budget Category Distribution</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="budgetChart" height="280"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- Recent Entries --}}
 <div class="card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -108,7 +142,7 @@
                     <td>{{ $entry->country->name }}</td>
                     <td>{{ $entry->city_visited }}</td>
                     <td><span class="badge bg-info">{{ $entry->purpose->name }}</span></td>
-                    <td>{{ $entry->visit_date->format('d M Y') }}</td>
+                    <td>{{ $entry->visit_date ? $entry->visit_date->format('d M Y') : '-' }}</td>
                 </tr>
                 @empty
                 <tr>
@@ -181,6 +215,60 @@
         options: {
             responsive: true,
             scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+
+    // Age Group Doughnut Chart
+    const ageData = @json($ageGroupDistribution);
+    new Chart(document.getElementById('ageGroupChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ageData.map(d => d.age_group),
+            datasets: [{
+                data: ageData.map(d => d.total),
+                backgroundColor: colors,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+        }
+    });
+
+    // Travel Type Bar Chart
+    const travelData = @json($travelTypeDistribution);
+    new Chart(document.getElementById('travelTypeChart'), {
+        type: 'bar',
+        data: {
+            labels: travelData.map(d => d.travel_type),
+            datasets: [{
+                label: 'Visitors',
+                data: travelData.map(d => d.total),
+                backgroundColor: ['#805ad5','#38a169','#d69e2e','#e53e3e','#2c5282','#dd6b20'],
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+
+    // Budget Category Pie Chart
+    const budgetData = @json($budgetDistribution);
+    new Chart(document.getElementById('budgetChart'), {
+        type: 'pie',
+        data: {
+            labels: budgetData.map(d => d.budget),
+            datasets: [{
+                data: budgetData.map(d => d.total),
+                backgroundColor: ['#38a169','#d69e2e','#e53e3e','#805ad5','#2c5282'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
         }
     });
 </script>

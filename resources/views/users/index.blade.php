@@ -36,6 +36,7 @@
                     </td>
                     <td>{{ $user->created_at->format('d M Y') }}</td>
                     <td>
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
                         @if($user->id !== auth()->id())
                         <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this user?')">
@@ -43,6 +44,7 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                         </form>
+                        @endif
                         @endif
                     </td>
                 </tr>

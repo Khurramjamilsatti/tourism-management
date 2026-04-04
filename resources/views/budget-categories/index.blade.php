@@ -7,9 +7,11 @@
 <div class="card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h6 class="mb-0">All Budget Categories</h6>
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('budget-categories.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-circle"></i> Add Budget Category
         </a>
+        @endif
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -28,12 +30,14 @@
                     <td>{{ $budget->name }}</td>
                     <td><span class="badge bg-primary">{{ $budget->tourism_data_count }}</span></td>
                     <td>
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('budget-categories.edit', $budget) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
                         <form action="{{ route('budget-categories.destroy', $budget) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this budget category?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @empty

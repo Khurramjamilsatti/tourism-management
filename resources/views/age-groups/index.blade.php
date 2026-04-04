@@ -7,9 +7,11 @@
 <div class="card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h6 class="mb-0">All Age Groups</h6>
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('age-groups.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-circle"></i> Add Age Group
         </a>
+        @endif
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -28,12 +30,14 @@
                     <td>{{ $ageGroup->name }}</td>
                     <td><span class="badge bg-primary">{{ $ageGroup->tourism_data_count }}</span></td>
                     <td>
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('age-groups.edit', $ageGroup) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
                         <form action="{{ route('age-groups.destroy', $ageGroup) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this age group?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @empty

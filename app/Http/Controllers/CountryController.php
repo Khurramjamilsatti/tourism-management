@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $countries = Country::withCount('tourismData')->orderBy('name')->paginate(15);
+        $countries = Country::withCount('tourismData')
+            ->when($request->search, fn($q, $s) => $q->where('name', 'like', "%{$s}%"))
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
         return view('countries.index', compact('countries'));
     }
 
