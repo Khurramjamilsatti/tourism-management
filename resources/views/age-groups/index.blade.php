@@ -28,7 +28,7 @@
                 <tr>
                     <td>{{ $loop->iteration + ($ageGroups->currentPage() - 1) * $ageGroups->perPage() }}</td>
                     <td>{{ $ageGroup->name }}</td>
-                    <td><a href="{{ URL::to('tourism-data?age_group_id=' . $ageGroup->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $ageGroup->tourism_data_count }}</a></td>
+                    <td><a href="{{ URL::to('tourism-data?age_group=' . $ageGroup->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $ageGroup->tourism_data_count }}</a></td>
                     <td>
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('age-groups.edit', $ageGroup) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
