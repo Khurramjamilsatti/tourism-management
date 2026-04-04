@@ -28,7 +28,7 @@
                 <tr>
                     <td>{{ $loop->iteration + ($travelTypes->currentPage() - 1) * $travelTypes->perPage() }}</td>
                     <td>{{ $travelType->name }}</td>
-                    <td><a href="{{ URL::to('tourism-data?travel_type=' . $travelType->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $travelType->tourism_data_count }}</a></td>
+                    <td><a href="{{ URL::to('tourism-data?travel_type=' . $travelType->name) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $travelType->tourism_data_count }}</a></td>
                     <td>
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('travel-types.edit', $travelType) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
