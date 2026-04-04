@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class TourismData extends Model
 {
@@ -28,7 +30,6 @@ class TourismData extends Model
     ];
 
     protected $casts = [
-        'visit_date' => 'date',
         'month' => 'integer',
         'duration' => 'integer',
         'satisfaction' => 'integer',
@@ -36,6 +37,22 @@ class TourismData extends Model
         'spending' => 'decimal:2',
         'will_return' => 'boolean',
     ];
+
+    protected function visitDate(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                if (empty($value) || $value === '0000-00-00') {
+                    return null;
+                }
+                try {
+                    return Carbon::parse($value);
+                } catch (\Throwable $e) {
+                    return null;
+                }
+            },
+        );
+    }
 
     public function country()
     {

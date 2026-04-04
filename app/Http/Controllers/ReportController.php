@@ -94,7 +94,7 @@ class ReportController extends Controller
                     $record->country->name,
                     $record->city_visited,
                     $record->purpose->name,
-                    $record->visit_date->format('Y-m-d'),
+                    $record->visit_date?->format('Y-m-d') ?? '-',
                     $record->feedback ?? '',
                     $record->creator->name,
                 ]);
