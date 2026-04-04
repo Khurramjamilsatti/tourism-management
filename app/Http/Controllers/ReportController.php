@@ -19,18 +19,19 @@ class ReportController extends Controller
 
     public function generate(Request $request)
     {
-        $rules = [
-            'date_from' => 'nullable|date_format:Y-m-d',
-            'date_to'   => 'nullable|date_format:Y-m-d',
+        $request->validate([
+            'date_from' => ['nullable', 'regex:/^\d{4}-\d{2}-\d{2}$/'],
+            'date_to'   => ['nullable', 'regex:/^\d{4}-\d{2}-\d{2}$/'],
             'country_id' => 'nullable|exists:countries,id',
             'purpose_id' => 'nullable|exists:visit_purposes,id',
-        ];
+        ]);
 
-        if ($request->filled('date_from')) {
-            $rules['date_to'] .= '|after_or_equal:date_from';
+        // Manual after_or_equal check without Carbon
+        if ($request->filled('date_from') && $request->filled('date_to')) {
+            if ($request->date_to < $request->date_from) {
+                return back()->withErrors(['date_to' => 'The date to must be after or equal to date from.'])->withInput();
+            }
         }
-
-        $request->validate($rules);
 
         $query = TourismData::with(['country', 'purpose', 'creator']);
 
