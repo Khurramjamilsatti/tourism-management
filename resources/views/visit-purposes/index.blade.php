@@ -28,7 +28,7 @@
                 <tr>
                     <td>{{ $loop->iteration + ($purposes->currentPage() - 1) * $purposes->perPage() }}</td>
                     <td>{{ $purpose->name }}</td>
-                    <td><span class="badge bg-primary">{{ $purpose->tourism_data_count }}</span></td>
+                    <td><a href="{{ URL::to('tourism-data?purpose_id=' . $purpose->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $purpose->tourism_data_count }}</a></td>
                     <td>
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('visit-purposes.edit', $purpose) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>

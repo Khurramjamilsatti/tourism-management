@@ -28,7 +28,7 @@
                 <tr>
                     <td>{{ $loop->iteration + ($budgetCategories->currentPage() - 1) * $budgetCategories->perPage() }}</td>
                     <td>{{ $budget->name }}</td>
-                    <td><span class="badge bg-primary">{{ $budget->tourism_data_count }}</span></td>
+                    <td><a href="{{ URL::to('tourism-data?budget_category_id=' . $budget->id) }}" class="badge rounded-pill bg-primary text-decoration-none">{{ $budget->tourism_data_count }}</a></td>
                     <td>
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('budget-categories.edit', $budget) }}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></a>
