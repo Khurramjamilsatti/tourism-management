@@ -34,7 +34,7 @@
                 <select name="age_group" class="form-select form-select-sm">
                     <option value="">All Age Groups</option>
                     @foreach($ageGroups as $ag)
-                        <option value="{{ $ag->name }}" {{ request('age_group') == $ag->name ? 'selected' : '' }}>{{ $ag->name }}</option>
+                        <option value="{{ $ag->name }}" {{ str_replace(' ', '+', request('age_group')) == $ag->name ? 'selected' : '' }}>{{ $ag->name }}</option>
                     @endforeach
                 </select>
             </div>

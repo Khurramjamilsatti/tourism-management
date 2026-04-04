@@ -41,7 +41,9 @@ class TourismDataController extends Controller
         }
 
         if ($request->filled('age_group')) {
-            $query->where('age_group', $request->age_group);
+            // URL decodes '+' as space, so restore it (e.g. "65+" in URL becomes "65 ")
+            $ageGroup = str_replace(' ', '+', $request->age_group);
+            $query->where('age_group', $ageGroup);
         }
 
         if ($request->filled('travel_type')) {
