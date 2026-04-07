@@ -62,17 +62,43 @@
         .btn-primary:hover { background: #1e3a5f; border-color: #1e3a5f; }
         .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .sidebar-section { color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 20px 5px; }
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1e3a5f;
+            cursor: pointer;
+            padding: 0;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+        }
+        .sidebar-overlay.show { display: block; }
         @media (max-width: 768px) {
-            .sidebar { width: 100%; min-height: auto; position: relative; }
+            .sidebar {
+                position: fixed;
+                width: 260px;
+                min-height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.show { transform: translateX(0); }
             .main-content { margin-left: 0; }
+            .sidebar-toggle { display: inline-block; }
         }
     </style>
     @stack('styles')
 </head>
 <body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="d-flex">
         {{-- Sidebar --}}
-        <nav class="sidebar d-flex flex-column">
+        <nav class="sidebar d-flex flex-column" id="sidebar">
             <div class="sidebar-brand">
                 <i class="bi bi-globe-americas"></i> Tourism MS
             </div>
@@ -141,7 +167,10 @@
         {{-- Main Content --}}
         <div class="main-content flex-grow-1">
             <div class="top-bar">
-                <h5 class="mb-0">@yield('page-title', 'Dashboard')</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+                    <h5 class="mb-0">@yield('page-title', 'Dashboard')</h5>
+                </div>
                 <div class="d-flex align-items-center gap-3">
                     <span class="text-muted">
                         <i class="bi bi-person-circle"></i> {{ auth()->user()->name }}
@@ -176,6 +205,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('show');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('show');
+            this.classList.remove('show');
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

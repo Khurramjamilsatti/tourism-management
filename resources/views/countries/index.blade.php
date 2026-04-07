@@ -5,6 +5,15 @@
 
 @section('content')
 <div class="card mb-3">
+    <div class="card-header bg-white">
+        <h6 class="mb-0"><i class="bi bi-bar-chart"></i> Records by Country (Top 15)</h6>
+    </div>
+    <div class="card-body">
+        <canvas id="countryChart" height="120"></canvas>
+    </div>
+</div>
+
+<div class="card mb-3">
     <div class="card-body">
         <form method="GET" action="{{ route('countries.index') }}" class="row g-2 align-items-end">
             <div class="col-md-4">
@@ -76,3 +85,26 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    var sorted = {!! json_encode($countries->sortByDesc('tourism_data_count')->take(15)->values()->map(fn($c) => ['name' => $c->name, 'count' => $c->tourism_data_count])) !!};
+    new Chart(document.getElementById('countryChart'), {
+        type: 'bar',
+        data: {
+            labels: sorted.map(c => c.name),
+            datasets: [{
+                label: 'Tourism Records',
+                data: sorted.map(c => c.count),
+                backgroundColor: '#2c5282',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+</script>
+@endpush

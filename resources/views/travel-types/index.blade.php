@@ -4,6 +4,15 @@
 @section('page-title', 'Travel Types Management')
 
 @section('content')
+<div class="card mb-3">
+    <div class="card-header bg-white">
+        <h6 class="mb-0"><i class="bi bi-bar-chart"></i> Records by Travel Type</h6>
+    </div>
+    <div class="card-body">
+        <canvas id="travelTypeChart" height="120"></canvas>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h6 class="mb-0">All Travel Types</h6>
@@ -55,3 +64,25 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    new Chart(document.getElementById('travelTypeChart'), {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($travelTypes->pluck('name')) !!},
+            datasets: [{
+                label: 'Tourism Records',
+                data: {!! json_encode($travelTypes->pluck('tourism_data_count')) !!},
+                backgroundColor: ['#2c5282','#3182ce','#4299e1','#63b3ed','#90cdf4','#bee3f8','#1e3a5f','#2a4a7f'],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+</script>
+@endpush
