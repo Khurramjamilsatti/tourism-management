@@ -66,6 +66,9 @@
             </div>
             <div class="card-body">
                 <canvas id="purposeChart" height="250"></canvas>
+                <hr class="my-3">
+                <h6 class="text-muted mb-2"><i class="bi bi-percent"></i> Purpose of Visit (%)</h6>
+                <div id="purposePercentageTable"></div>
             </div>
         </div>
     </div>
@@ -195,6 +198,21 @@
             plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
         }
     });
+
+    // Purpose Percentage Table
+    (function() {
+        const total = purposeData.reduce((sum, d) => sum + d.total, 0);
+        let html = '<table class="table table-sm table-borderless mb-0">';
+        purposeData.forEach((d, i) => {
+            const pct = total > 0 ? ((d.total / total) * 100).toFixed(1) : '0.0';
+            html += '<tr>' +
+                '<td><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:' + colors[i % colors.length] + ';margin-right:6px;"></span>' + d.purpose + '</td>' +
+                '<td class="text-end fw-bold">' + pct + '%</td>' +
+                '</tr>';
+        });
+        html += '</table>';
+        document.getElementById('purposePercentageTable').innerHTML = html;
+    })();
 
     // Monthly Trend Line Chart
     const trendData = @json($monthlyTrends);
