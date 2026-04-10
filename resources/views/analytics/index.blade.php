@@ -160,9 +160,21 @@
                 backgroundColor: colors,
             }]
         },
+        plugins: [ChartDataLabels],
         options: {
             responsive: true,
-            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12 } },
+                datalabels: {
+                    display: true,
+                    color: '#fff',
+                    font: { weight: 'bold', size: 11 },
+                    formatter: (value, ctx) => {
+                        const sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        return sum > 0 ? ((value / sum) * 100).toFixed(1) + '%' : '';
+                    }
+                }
+            }
         }
     });
 
